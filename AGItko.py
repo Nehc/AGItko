@@ -12,11 +12,6 @@ else:
         print('bot token needed...')
         quit()
 
-if len(sys.argv)>2:
-    my_chat_id = int(sys.argv[2])
-else: 
-    my_chat_id = int(os.getenv('MY_CHAT'))
-
 model_name = "Nehc/AGIRussia"
 
 tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -46,23 +41,27 @@ def message_reply(message):
     
     text = context+f"<IN>{message.text}\n<OUT>"
     inpt = tokenizer.encode(text, return_tensors="pt")    
+    
+    T_IN = tokenizer.encode('<IN>')[0]
+    T_OUT = tokenizer.encode('<OUT>')[0]
+    T_END = tokenizer.encode('<END>')[0]
+    T_PAD = tokenizer.encode('|PAD|')[0]
 
     # Run eval step for caption
     with torch.no_grad():
-        out = model.generate(inpt.cuda(), max_length=500, do_sample=True, top_k=5, top_p=0.95, temperature=1, eos_token_id=50260, pad_token_id=50261)
+        out = model.generate(inpt.cuda(), max_length=500, do_sample=True, top_k=5, top_p=0.95, temperature=1, eos_token_id=T_END, pad_token_id=T_PAD)
     
-    out_tokens = torch.where(out[0]==50259)
+    out_tokens = torch.where(out[0]==T_OUT)
     last_repl = out[0][out_tokens[0][-1]+1:-1]
     repl = tokenizer.decode(last_repl)
     bot.reply_to(message, repl)
-    in_tokens = torch.where(out[0]==50258)
-    if len(in_tokens[0])>2:
-        context = out[0][in_tokens[0][-3]:]                        
+    in_tokens = torch.where(out[0]==T_IN)
+    if len(in_tokens[0])<=2 or len(out[0])<=200:
+        context = out[0]                        
     else: 
-        context = out[0]
+        context = out[0][in_tokens[0][-3]:]
 
     with open(src, 'w') as new_file:
-
         new_file.write(tokenizer.decode(context))
 
 #bot.polling(interval=3, timeout=45)

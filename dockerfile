@@ -49,4 +49,4 @@ ARG TG_TOKEN=""
 ENV TG_TOKEN="${TG_TOKEN}" 
 
 # Configure container startup
-ENTRYPOINT ["python", "./telebot.py"]
+ENTRYPOINT ["python", "./AGItko.py"]

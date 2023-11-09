@@ -3,7 +3,9 @@ chat-bot on ruGPT-medium and AGIRussia corp
 
 Бот обучен на корпусе диалогов из рускоязычных групп тематики AGI (Artificial general intelegense), можно говорить с ним на тему ИИ, сознания, мышления и смежные темы.
 
-Процесс обучения расписан [в этом Colab](https://colab.research.google.com/drive/1P7cd70gSXjBqQtUJgG84n-NvgnN7nv2p?usp=sharing). 
+Процесс обучения расписан тут: <a target="_blank" href="https://colab.research.google.com/github/Nehc/AGItko/blob/main/GPT-Chatbot.ipynb">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a>
 
 так же прилагается файл [AGItko.py](https://github.com/Nehc/AGItko/blob/main/AGItko.py) для запуска бота с обученной моделью. Формат запуска:
     
